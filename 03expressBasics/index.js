@@ -9,6 +9,17 @@ app.get("/about", (req, res) => {
   res.send("<h1>About Page</h1>");
 });
 
+app.get("/details", (req, res) => {
+  // res.status(500).json({
+  //   user: "Rahul",
+  //   balance: "2000",
+  //   id: "123gh",
+  // });
+  res.status(500).json({
+    error: "Something went wrong..",
+  });
+});
+
 app.post("/login", (req, res) => {
   res.send("login success");
 });
@@ -44,6 +55,10 @@ app.get("/users/:id/status/:status_id", (req, res) => {
 
 // grab input details from user and check on database
 app.get("/flights/:from-:to", (req, res) => {
+  res.send(req.params);
+});
+
+app.get("/book-train/:from-:to", (req, res) => {
   res.send(req.params);
 });
 app.listen(3000, () => {

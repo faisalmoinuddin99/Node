@@ -1,0 +1,12 @@
+res.download()
+res.end()
+res.json()
+res.send()
+res.render()
+res.redirect()
+res.sendStatus()
+
+200 - OK
+403 - Forbidden
+404 - File not found
+500 - Internal Server Error
