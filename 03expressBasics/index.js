@@ -34,6 +34,18 @@ app.get("/contact-us", (req, res) => {
   res.send("Contact us Page");
 });
 
+app.get("/ab*cd", (req, res) => {
+  res.send("<h1>I am Regex.. </h1>");
+});
+
+app.get("/users/:id/status/:status_id", (req, res) => {
+  res.send(req.params);
+});
+
+// grab input details from user and check on database
+app.get("/flights/:from-:to", (req, res) => {
+  res.send(req.params);
+});
 app.listen(3000, () => {
   console.log(`Server is running at port 3000....`);
 });
