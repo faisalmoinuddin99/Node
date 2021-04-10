@@ -31,7 +31,7 @@
       <div class="card" style="width: 18rem">
         <img
           class="card-img-top"
-          src="https://images.pexels.com/photos/1144256/pexels-photo-1144256.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350 >"
+          src="<%= typeof filename == 'undefined' ? 'https://images.pexels.com/photos/1144256/pexels-photo-1144256.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350' : filename %>"
           alt="Card image cap"
         />
         <div class="card-body">
@@ -58,7 +58,9 @@
               <label class="custom-file-label" for="validatedCustomFile"
                 >Choose file...</label
               >
-              <p class="red">Error message will go here</p>
+              <p class="red">
+                <%= typeof message == 'undefined' ? '' : message %>
+              </p>
             </div>
             <br />
             <button type="submit" class="btn btn-primary gap">Submit</button>
