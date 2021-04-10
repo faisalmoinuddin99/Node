@@ -41,3 +41,48 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+//@route    -     GET  /
+//@desc     -     a route to home page
+//@access   -     PUBLIC
+app.get("/", (req, res) => {
+  res.render("home", { user: req.user });
+});
+
+//@route    -     GET  /login
+//@desc     -     a route to login page
+//@access   -     PUBLIC
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+//@route    -     GET  /login/facebook
+//@desc     -     a route to facebook auth
+//@access   -     PUBLIC
+app.get("/login/facebook", passport.authenticate("facebook"));
+
+//@route    -     GET  /login/facebook/callback
+//@desc     -     a route to facebook auth
+//@access   -     PUBLIC
+app.get(
+  "/login/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
+
+//@route    -     GET  /profile
+//@desc     -     a route to profile of user
+//@access   -     PRIVATE
+
+app.get(
+  "/profile",
+  require("connect-ensure-login").ensureLoggedIn(),
+  (req, res) => {
+    res.render("profile", { user: req.user });
+  }
+);
+
+app.listen("3000");
