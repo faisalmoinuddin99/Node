@@ -22,7 +22,19 @@ const Person = require("../../models/Person");
 //@access   PUBLIC
 router.post("/register", (req, res) => {
   Person.findOne({ email: req.body.email })
-    .then()
+    .then((person) => {
+      if (person) {
+        return res
+          .status(400)
+          .json({ emailerror: "Email is already registerd in our system" });
+      } else {
+        const newPerson = new Person({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+        });
+      }
+    })
     .catch((err) => console.log(err));
 });
 module.exports = router;
