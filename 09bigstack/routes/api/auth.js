@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jsonwt = require("json-web-token");
 const passport = require("passport");
 const key = require("../../setup/myurl");
@@ -49,4 +49,26 @@ router.post("/register", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+//@type     POST
+//@route    /api/auth/login
+//@desc     route for login of users
+//@access   PUBLIC
+
+router.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  Person.findOne({ email })
+    .then((person) => {
+      if (!person) {
+        return res
+          .status(404)
+          .json({ emailError: "user not found with this email" });
+      } else {
+      }
+    })
+    .catch((err) => console.log(err));
+});
+
 module.exports = router;
