@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jsonwt = require("json-web-token");
 const passport = require("passport");
 const key = require("../../setup/myurl");
@@ -32,6 +32,18 @@ router.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           password: req.body.password,
+        });
+        //Encrypt password using bcrypt
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newPerson.password, salt, (err, hash) => {
+            // Store hash in your password DB.
+            if (err) throw err;
+            newPerson.password = hash;
+            newPerson
+              .save()
+              .then((person) => res.json(person))
+              .catch((err) => console.log(err));
+          });
         });
       }
     })
