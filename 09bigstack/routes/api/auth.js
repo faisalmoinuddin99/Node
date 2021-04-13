@@ -65,7 +65,22 @@ router.post("/login", (req, res) => {
         return res
           .status(404)
           .json({ emailError: "user not found with this email" });
-      } else {
+      }
+      if (person) {
+        bcrypt
+          .compare(password, person.password)
+          .then((isCorrect) => {
+            if (isCorrect) {
+              res.json({
+                success: "user is able to login successfully",
+              });
+            } else {
+              res
+                .status(400)
+                .json({ passwordError: "Password is not correct" });
+            }
+          })
+          .catch((err) => console.log(err));
       }
     })
     .catch((err) => console.log(err));
