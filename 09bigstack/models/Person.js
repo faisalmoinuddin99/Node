@@ -17,6 +17,10 @@ const personSchema = new Schema({
   username: {
     type: String,
   },
+  gender: {
+    type: String,
+    required: true,
+  },
   profilepic: {
     type: String,
     default:

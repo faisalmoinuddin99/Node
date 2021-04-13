@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const passport = require("passport");
 const app = express();
 
 //bring all routes
@@ -22,6 +23,12 @@ mongoose
   .catch((err) => console.log(err));
 
 const port = process.env.PORT || 3000;
+
+//Passport middleware
+app.use(passport.initialize());
+
+//Config for JWT strategy
+require("./strategies/jsonwtStrategy")(passport);
 
 //just for testing -> route
 app.get("/", (req, res) => {

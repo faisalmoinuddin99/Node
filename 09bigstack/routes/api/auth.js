@@ -32,6 +32,7 @@ router.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           password: req.body.password,
+          gender: req.body.gender,
         });
         //Encrypt password using bcrypt
         bcrypt.genSalt(10, (err, salt) => {
@@ -80,6 +81,7 @@ router.post("/login", (req, res) => {
                 id: person.id,
                 name: person.name,
                 email: person.email,
+                gender: person.gender,
               };
               jsonwt.sign(
                 payload,
@@ -104,5 +106,24 @@ router.post("/login", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+//@type     GET
+//@route    /api/auth/profile
+//@desc     route for user profile
+//@access   PRIVATE
+router.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    // console.log(req);
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+      profilePic: req.user.profilepic,
+      gender: req.user.gender,
+    });
+  }
+);
 
 module.exports = router;
