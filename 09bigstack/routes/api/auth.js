@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const jsonwt = require("json-web-token");
+const jsonwt = require("jsonwebtoken");
 const passport = require("passport");
 const key = require("../../setup/myurl");
 
@@ -71,10 +71,28 @@ router.post("/login", (req, res) => {
           .compare(password, person.password)
           .then((isCorrect) => {
             if (isCorrect) {
-              res.json({
-                success: "user is able to login successfully",
-                //use payload and create token for user
-              });
+              //   res.json({
+              //     success: "user is able to login successfully",
+              //
+              //   });
+              //use payload and create token for user
+              const payload = {
+                id: person.id,
+                name: person.name,
+                email: person.email,
+              };
+              jsonwt.sign(
+                payload,
+                key.secret,
+                { expiresIn: 60 * 60 },
+                (err, token) => {
+                  if (err) throw err;
+                  res.json({
+                    success: true,
+                    token: "Bearer " + token,
+                  });
+                }
+              );
             } else {
               res
                 .status(400)
