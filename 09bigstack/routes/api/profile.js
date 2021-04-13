@@ -1,10 +1,31 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+const passport = require("passport");
 
-router.get("/", (req, res) => {
-  res.json({
-    profile: "Profile is success",
-  });
-});
+//Load Person Model
+const Person = require("../../models/Person");
+
+//Load Profile Model
+const Profile = require("../../models/Profile");
+//@type     GET
+//@route    /api/profile
+//@desc     route for personal user profile
+//@access   PRIVATE
+
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        if (!profile) {
+          return res.status(404).json({ profileNotFound: "No profile found" });
+        }
+        res.json(profile);
+      })
+      .catch((err) => console.log("Got some error in profile " + err));
+  }
+);
 
 module.exports = router;
