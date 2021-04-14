@@ -48,6 +48,37 @@ router.post(
     if (req.body.youtube) profileValues.youtube = req.body.youtube;
     if (req.body.facebook) profileValues.facebook = req.body.facebook;
     if (req.body.instagram) profileValues.instagram = req.body.instagram;
+
+    //Do database stuff
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        if (profile) {
+          Profile.findOneAndUpdate(
+            { user: req.user.id },
+            { $set: profileValues },
+            { new: true }
+          )
+            .then((profile) => res.json(profile))
+            .catch((err) => console.log("Problem in update " + err));
+        } else {
+          Profile.findOne({ username: profileValues.username })
+            .then((profile) => {
+              // Username already exit
+              if (profile) {
+                res.status(400).json({ username: "Username already exist" });
+              }
+              //save user
+              new Profile(profileValues)
+                .save()
+                .then((profile) => {
+                  res.json(profile);
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        }
+      })
+      .catch((err) => console.log("Problem in fetching profile" + err));
   }
 );
 module.exports = router;
