@@ -45,9 +45,11 @@ router.post(
     if (typeof req.body.languages !== undefined) {
       profileValues.languages = req.body.languages.split(",");
     }
-    if (req.body.youtube) profileValues.youtube = req.body.youtube;
-    if (req.body.facebook) profileValues.facebook = req.body.facebook;
-    if (req.body.instagram) profileValues.instagram = req.body.instagram;
+    //get social links
+    profileValues.social = {};
+    if (req.body.youtube) profileValues.social.youtube = req.body.youtube;
+    if (req.body.facebook) profileValues.social.facebook = req.body.facebook;
+    if (req.body.instagram) profileValues.social.instagram = req.body.instagram;
 
     //Do database stuff
     Profile.findOne({ user: req.user.id })
@@ -81,4 +83,22 @@ router.post(
       .catch((err) => console.log("Problem in fetching profile" + err));
   }
 );
+
+//@type     POST
+//@route    /api/profile/:username
+//@desc     route for getting user profile based on USERNAME
+//@access   PUBLIC
+
+router.get("/:username", (req, res) => {
+  Profile.findOne({ username: req.params.username })
+    .populate("user", ["name", "profilepic"])
+    .then((profile) => {
+      if (!profile) {
+        res.status(404).json({ userNotFound: "User not found" });
+      }
+      res.json(profile);
+    })
+    .catch((err) => console.log("Error in fetching username " + err));
+});
+
 module.exports = router;
