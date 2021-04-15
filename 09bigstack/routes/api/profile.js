@@ -84,21 +84,38 @@ router.post(
   }
 );
 
-//@type     POST
+//@type     GET
 //@route    /api/profile/:username
 //@desc     route for getting user profile based on USERNAME
 //@access   PUBLIC
 
-router.get("/:username", (req, res) => {
-  Profile.findOne({ username: req.params.username })
+// router.get("/:username", (req, res) => {
+//   Profile.findOne({ username: req.params.username })
+//     .populate("user", ["name", "profilepic"])
+//     .then((profile) => {
+//       if (!profile) {
+//         res.status(404).json({ userNotFound: "User not found" });
+//       }
+//       res.json(profile);
+//     })
+//     .catch((err) => console.log("Error in fetching username " + err));
+// });
+
+//Assignment
+//@type     GET
+//@route    /api/profile/:id
+//@desc     route for getting user profile based on ID
+//@access   PUBLIC
+router.get("/:id", (req, res) => {
+  Profile.findOne({ id: req.params._id })
     .populate("user", ["name", "profilepic"])
     .then((profile) => {
       if (!profile) {
-        res.status(404).json({ userNotFound: "User not found" });
+        res.status(404).json({ idNotFound: "Id not Found" });
       }
       res.json(profile);
     })
-    .catch((err) => console.log("Error in fetching username " + err));
+    .catch((err) => console.log("Erro in fetching id " + err));
 });
 
 module.exports = router;
