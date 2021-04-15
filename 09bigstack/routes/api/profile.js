@@ -89,33 +89,33 @@ router.post(
 //@desc     route for getting user profile based on USERNAME
 //@access   PUBLIC
 
-// router.get("/:username", (req, res) => {
-//   Profile.findOne({ username: req.params.username })
-//     .populate("user", ["name", "profilepic"])
-//     .then((profile) => {
-//       if (!profile) {
-//         res.status(404).json({ userNotFound: "User not found" });
-//       }
-//       res.json(profile);
-//     })
-//     .catch((err) => console.log("Error in fetching username " + err));
-// });
-
-//Assignment
-//@type     GET
-//@route    /api/profile/:id
-//@desc     route for getting user profile based on ID
-//@access   PUBLIC
-router.get("/:id", (req, res) => {
-  Profile.findOne({ id: req.params._id })
+router.get("/:username", (req, res) => {
+  Profile.findOne({ username: req.params.username })
     .populate("user", ["name", "profilepic"])
     .then((profile) => {
       if (!profile) {
-        res.status(404).json({ idNotFound: "Id not Found" });
+        res.status(404).json({ userNotFound: "User not found" });
       }
       res.json(profile);
     })
-    .catch((err) => console.log("Erro in fetching id " + err));
+    .catch((err) => console.log("Error in fetching username " + err));
+});
+
+//@type     GET
+//@route    /api/profile/find/everyone
+//@desc     route for getting user profile of EVERYONE
+//@access   PUBLIC
+
+router.get("/find/everyone", (req, res) => {
+  Profile.find()
+    .populate("user", ["name", "profilepic"])
+    .then((profiles) => {
+      if (!profiles) {
+        res.status(404).json({ userNotFound: "No profile availabe" });
+      }
+      res.json(profiles);
+    })
+    .catch((err) => console.log("Error in fetching username " + err));
 });
 
 module.exports = router;
