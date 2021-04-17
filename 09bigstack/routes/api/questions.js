@@ -45,4 +45,31 @@ router.post(
   }
 );
 
+//@type     POST
+//@route    /api/answers/:id
+//@desc     route for submitting answers to questions
+//@access   PRIVATE
+
+router.post(
+  "/answers/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Question.findById(req.params.id)
+      .then((question) => {
+        const newAnswer = {
+          user: req.user.id,
+          name: req.body.name,
+          text: req.body.text,
+        };
+        // push it on array now
+        question.answers.unshift(newAnswer);
+        question
+          .save()
+          .then((question) => res.json(question))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
 module.exports = router;
