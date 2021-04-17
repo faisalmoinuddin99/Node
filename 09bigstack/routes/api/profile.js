@@ -138,4 +138,40 @@ router.delete(
   }
 );
 
+//@type     POST
+//@route    /api/profile/workrole
+//@desc     route for adding work profile of a person
+//@access   PRIVATE
+
+router.post(
+  "/workrole",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then((profile) => {
+        //assignment
+        if (!profile) {
+          res.status(404).json({ workNotFound: "Work not found" });
+        } else {
+          const newWork = {
+            role: req.body.role,
+            company: req.body.company,
+            country: req.body.country,
+            from: req.body.from,
+            to: req.body.to,
+            current: req.body.current,
+            details: req.body.details,
+          };
+          // profile.workrole.push(newWork) --Method 1 to store in an array
+          profile.workrole.unshift(newWork); // method 2
+          profile
+            .save()
+            .then((profile) => res.json(profile))
+            .catch((err) => console.log(err));
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
 module.exports = router;
