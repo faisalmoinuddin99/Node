@@ -14,13 +14,14 @@ const Question = require("../../models/Question");
 
 //@type     GET
 //@route    /api/questions
-//@desc     route for personal user profile
-//@access   PRIVATE
+//@desc     route for showing all questions
+//@access   PUBLIC
 
 router.get("/", (req, res) => {
-  res.json({
-    question: "Questions success",
-  });
+  Question.find()
+    .sort("-date")
+    .then((question) => res.json(question))
+    .catch((err) => res.json({ noQuestion: "No Question to display" }));
 });
 
 //@type     POST
